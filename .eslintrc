@@ -1,0 +1,36 @@
+{
+  "parser": "typescript-eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "jsx": true
+  },
+  "env": {
+    "browser": true
+  },
+  "plugins": [
+    "typescript",
+    "react",
+    "react-native",
+    "prettier"
+  ],
+  "extends": ["plugin:prettier/recommended", "eslint:recommended", "plugin:react/recommended"],
+  "rules": {
+    "typescript/no-unused-vars": 0,
+    "react/no-did-mount-set-state": 2,
+    "react/no-direct-mutation-state": 2,
+    "react/jsx-uses-vars": 2,
+    "react/prop-types": 2,
+    "react/jsx-no-bind": 2,
+    "react/jsx-no-duplicate-props": 2,
+    "no-undef": 2,
+    "semi": [2, "never"],
+    "no-debugger": 0
+  },
+  "globals": {
+    "GLOBAL": false,
+    "it": false,
+    "expect": false,
+    "describe": false
+   }
+}
