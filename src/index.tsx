@@ -1,26 +1,62 @@
-import React, { Component } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import * as React from 'react'
+import { SafeAreaView } from 'react-native'
 
-export default class App extends Component<{}, {}> {
+import { Screen } from '@shoutem/ui'
+
+import Header from './components/Header/Header.component'
+import Coins from './components/Coins/Coins.component'
+import Graph from './components/Graph/Graph.component'
+
+import * as Config from './config'
+
+import CryptoContext from './context'
+
+export interface AppState {
+  [key: string]: {
+    price: string
+  }
+}
+
+class App extends React.Component<{}, AppState> {
+  // Set initial state.
+  state = Config.Coins.reduce((acc, coin) => ({ ...acc, [coin]: { price: '' } }), {})
+
+  componentDidMount() {
+    const ws = new WebSocket(Config.Endpoints.WEBSOCKET_FEED_URL)
+
+    ws.onopen = () => {
+      ws.send(
+        JSON.stringify({
+          type: 'subscribe',
+          channels: ['ticker'],
+          product_ids: Config.Coins,
+        })
+      )
+    }
+
+    ws.onmessage = msg => {
+      const { price, product_id } = JSON.parse(msg.data)
+      this.setState({ [product_id]: { price } })
+    }
+
+    ws.onerror = e => {
+      console.error(e)
+    }
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>React Native with Typescript & ESLint</Text>
-      </View>
+      <Screen>
+        <SafeAreaView>
+          <Header />
+          <CryptoContext.Provider value={this.state}>
+            <Coins />
+            <Graph />
+          </CryptoContext.Provider>
+        </SafeAreaView>
+      </Screen>
     )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-})
+export default App
