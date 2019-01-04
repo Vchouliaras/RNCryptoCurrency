@@ -1,84 +1,108 @@
-// @ts-nocheck
-
-import { SafeAreaView, ART } from 'react-native'
+import * as React from 'react'
 import * as d3 from 'd3'
-import React, { Component } from 'react'
+import { ART, Dimensions } from 'react-native'
+import groupby from 'lodash.groupby'
+import { Spinner } from '@shoutem/ui'
 
-const width = 400
-const height = 400
+import Styles from './Graph.styles'
+import CryptoContext from '../../context'
+import * as Config from '../../config'
+import { Coins } from '../../utils'
 
-// var data = [4, 8, 15, 16, 23, 42];
+import { IGraphProps, IAppState } from '../../types'
 
-// var x = d3.scale.linear()
-//     .domain([0, d3.max(data)])
-//     .range([0, 420]);
+export default class Graph extends React.Component<IGraphProps, {}> {
+  static contextType = CryptoContext
 
-/*
-From https://bl.ocks.org/mbostock/4060954. Customizing and confirming it works with D3 v5.
-*/
+  static defaultProps: IGraphProps
 
-var n = 2, // number of layers
-  m = 100, // number of samples per layer
-  k = 10 // number of bumps per layer
+  /**
+   *
+   *
+   * @memberof Graph
+   */
+  normalizeData = (contextData: IAppState) => {
+    const values = Object.entries(contextData).reduce((acc, data) => {
+      const key = data[0]
+      const mappedData = data[1].map(d => ({ time: d.time, [key]: d.price }))
 
-// Inspired by Lee Byron’s test data generator.
-const bump = (a, n) => {
-  var x = 1 / (0.1 + Math.random()),
-    y = 2 * Math.random() - 0.5,
-    z = 10 / (0.1 + Math.random())
-  for (var i = 0; i < n; i++) {
-    var w = (i / n - y) * z
-    a[i] += x * Math.exp(-w * w)
+      return [...acc, ...mappedData]
+    }, [])
+
+    // Group values by time.
+    const grouped = groupby(values, value => value.time)
+
+    const normalizedData = Object.entries(grouped).map(g => {
+      return g[1].reduce((acc, data) => ({ ...acc, ...data }), {})
+    })
+
+    return normalizedData
   }
-}
 
-const bumps = (n, m) => {
-  var a = [],
-    i
-  for (i = 0; i < n; ++i) a[i] = 0
-  for (i = 0; i < m; ++i) bump(a, n)
-  return a
-}
+  /**
+   *
+   *
+   * @memberof Graph
+   */
+  getStackedData = (normalizedData: Array<{ [key: string]: number }>) => {
+    const stack = d3
+      .stack()
+      .keys(Config.Coins)
+      .order(d3.stackOrderDescending)
+      .offset(d3.stackOffsetSilhouette)
 
-const stackMax = layer => d3.max(layer, d => d[1])
+    const stackedData = stack(normalizedData)
 
-const stackMin = layer => d3.min(layer, d => d[0])
+    return stackedData
+  }
 
-var stack = d3
-  .stack()
-  .keys(d3.range(n))
-  .offset(d3.stackOffsetWiggle)
-var layers0 = stack(d3.transpose(d3.range(n).map(() => bumps(m, k))))
-var layers1 = stack(d3.transpose(d3.range(n).map(() => bumps(m, k))))
-var layers = layers0.concat(layers1)
+  /**
+   *
+   *
+   * @memberof Graph
+   */
+  generateGraphPath = (
+    series: Array<[]>,
+    normalizedData: Array<{ [key: string]: number }>
+  ): d3.Area<[number, number]> => {
+    const xScale = d3
+      .scaleLinear()
+      .domain(d3.extent(normalizedData, d => d.time))
+      .range([0, this.props.width])
 
-var x = d3
-  .scaleLinear()
-  .domain([0, m - 1])
-  .range([0, width])
+    const stackMax = (layer: Array<[number, number]>) => d3.max(layer, d => d[1])
+    const stackMin = (layer: Array<[number, number]>) => d3.min(layer, d => d[0])
 
-var y = d3
-  .scaleLinear()
-  .domain([d3.min(layers, stackMin), d3.max(layers, stackMax)])
-  .range([height, 0])
+    const yScale = d3
+      .scaleSqrt()
+      .domain([d3.min(series, stackMin), d3.max(series, stackMax)])
+      .range([0, this.props.height])
 
-var z = d3.interpolateCool
+    const area = d3
+      .area()
+      .x(d => xScale(d['data']['time']))
+      .y0(d => yScale(d[0]))
+      .y1(d => yScale(d[1]))
 
-var area = d3
-  .area()
-  .x((d, i) => x(i))
-  .y0(d => y(d[0]))
-  .y1(d => y(d[1]))
+    return area
+  }
 
-// debuggers
-
-class Graph extends Component {
   render() {
+    const isProductsEmpty = Coins.isProductsEmpty(this.context)
+
+    if (isProductsEmpty) {
+      return <Spinner style={{ ...Styles.spinner, size: 'large' }} />
+    }
+
+    const normalizedData = this.normalizeData(this.context)
+    const series = this.getStackedData(normalizedData)
+    const area = this.generateGraphPath(series, normalizedData)
+
     return (
-      <ART.Surface width={width} height={height}>
+      <ART.Surface width={this.props.width} height={this.props.height}>
         <ART.Group>
-          {layers.map((l, i) => (
-            <ART.Shape key={i} d={area(l)} fill={z(Math.random())} />
+          {series.map((layer, index) => (
+            <ART.Shape key={index} d={area(layer)} fill={Config.CoinsColor[index]} />
           ))}
         </ART.Group>
       </ART.Surface>
@@ -86,4 +110,7 @@ class Graph extends Component {
   }
 }
 
-export default Graph
+Graph.defaultProps = {
+  width: Dimensions.get('window').width,
+  height: 350,
+}

@@ -12,6 +12,14 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     alignSelf: 'center',
+    fontSize: 18,
+    opacity: 0.8,
+  },
+  colorLabel: {
+    width: 10,
+    height: 10,
+    position: 'absolute',
+    right: -17,
   },
 })
 

@@ -1,8 +1,10 @@
 import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
-  spinner: {
-    color: 'rgba(102, 102, 102, 1)',
+  container: {
+    marginTop: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 

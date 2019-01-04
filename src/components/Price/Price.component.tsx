@@ -1,14 +1,15 @@
 import * as React from 'react'
 import { Title } from '@shoutem/ui'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 
-interface PriceProps {
-  price: string
-}
+import { IPriceProps } from '../../types'
 
-const Price: React.SFC<PriceProps> = ({ price }) => (
+const Price: React.SFC<IPriceProps> = ({ price = 0, symbol }) => (
   <View>
-    <Title styleName="bold"> {Number(price).toFixed(3)} </Title>
+    <Title>
+      <Text> {symbol} </Text>
+      {price && price.toFixed(2)}
+    </Title>
   </View>
 )
 

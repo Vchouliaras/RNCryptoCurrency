@@ -1,4 +1,4 @@
 import * as Endpoints from './endpoints'
-import { Coins } from './coins'
+import { Coins, CoinsColor } from './coins'
 
-export { Endpoints, Coins }
+export { Endpoints, Coins, CoinsColor }
