@@ -64,7 +64,6 @@ export default class App extends React.Component<{}, IAppState> {
             time: now,
           },
         ]
-        console.log(`%c ${values.length}`, 'color: green')
       })
 
       return newState
