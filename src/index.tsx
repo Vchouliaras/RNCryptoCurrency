@@ -87,7 +87,7 @@ export default class App extends React.Component<{}, IAppState> {
       const { product_id, price } = JSON.parse(data)
 
       // eslint-disable-next-line
-      console.log(product_id, price)
+      // console.log(product_id, price)
 
       if (!this.shouldUpdateState(product_id, price)) {
         return null
