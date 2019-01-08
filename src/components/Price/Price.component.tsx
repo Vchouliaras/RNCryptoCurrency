@@ -7,7 +7,7 @@ import { IPriceProps } from '../../types'
 const Price: React.SFC<IPriceProps> = ({ price = 0, symbol }) => (
   <View>
     <Title>
-      <Text> {symbol} </Text>
+      <Text>{symbol}</Text>
       {price && price.toFixed(2)}
     </Title>
   </View>

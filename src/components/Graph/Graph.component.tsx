@@ -1,26 +1,27 @@
 import * as React from 'react'
 import * as d3 from 'd3'
 import { ART, Dimensions } from 'react-native'
-import groupby from 'lodash.groupby'
 import { Spinner } from '@shoutem/ui'
+import groupby from 'lodash.groupby'
 
 import Styles from './Graph.styles'
 import CryptoContext from '../../context'
 import * as Config from '../../config'
-import { Coins } from '../../utils'
+import { Coins, Orientation } from '../../utils'
 
-import { IGraphProps, IAppState } from '../../types'
+import { IGraphState, IAppState } from '../../types'
 
-export default class Graph extends React.Component<IGraphProps, {}> {
+export default class Graph extends React.Component<{}, IGraphState> {
   static contextType = CryptoContext
 
-  static defaultProps: IGraphProps = {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height / 2,
+  state = {
+    width: 0,
+    height: 0,
   }
 
   /**
-   *
+   * Normalize context data which contain App's state
+   * in order to create specific data format for D3 Streamgraph
    *
    * @memberof Graph
    */
@@ -43,7 +44,8 @@ export default class Graph extends React.Component<IGraphProps, {}> {
   }
 
   /**
-   *
+   * Create specific data format based on the state
+   * for the stream graph to display data properly
    *
    * @memberof Graph
    */
@@ -60,7 +62,8 @@ export default class Graph extends React.Component<IGraphProps, {}> {
   }
 
   /**
-   *
+   * Create the svg path based on
+   * the stacked data provided
    *
    * @memberof Graph
    */
@@ -71,7 +74,7 @@ export default class Graph extends React.Component<IGraphProps, {}> {
     const xScale = d3
       .scaleLinear()
       .domain(d3.extent(normalizedData, d => d.time))
-      .range([0, this.props.width])
+      .range([0, this.state.width])
 
     const stackMax = (layer: Array<[number, number]>) => d3.max(layer, d => d[1])
     const stackMin = (layer: Array<[number, number]>) => d3.min(layer, d => d[0])
@@ -79,7 +82,7 @@ export default class Graph extends React.Component<IGraphProps, {}> {
     const yScale = d3
       .scaleSqrt()
       .domain([d3.min(series, stackMin), d3.max(series, stackMax)])
-      .range([0, this.props.height])
+      .range([0, this.state.height])
 
     const area = d3
       .area()
@@ -88,6 +91,28 @@ export default class Graph extends React.Component<IGraphProps, {}> {
       .y1(d => yScale(d[1]))
 
     return area
+  }
+
+  /**
+   * Sets proper D3 graph dimensions based on the
+   * current orientation mode.
+   *
+   * @memberof Graph
+   */
+  setProperGraphDimensions = (orientation: string): void => {
+    const { width, height } = Dimensions.get('window')
+    if (orientation === Orientation.PORTRAIT) {
+      this.setState({ width, height: height / 2 })
+    } else {
+      this.setState({ width, height: height / 3 })
+    }
+  }
+
+  componentDidMount() {
+    const orientation = Orientation.getOrientation()
+    this.setProperGraphDimensions(orientation)
+
+    Orientation.detectOrientationMode(this.setProperGraphDimensions)
   }
 
   render() {
@@ -102,7 +127,7 @@ export default class Graph extends React.Component<IGraphProps, {}> {
     const area = this.generateGraphPath(series, normalizedData)
 
     return (
-      <ART.Surface width={this.props.width} height={this.props.height}>
+      <ART.Surface width={this.state.width} height={this.state.height}>
         <ART.Group>
           {series.map((layer, index) => (
             <ART.Shape key={index} d={area(layer)} fill={Config.CoinsColor[index]} />

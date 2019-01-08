@@ -53,7 +53,7 @@ export default class App extends React.Component<{}, IAppState> {
       Object.entries(state).map(([id, values]) => {
         // Truncate state when values
         // overcome a specific amount
-        const newValues = values.length > 400 ? takeright(values, 100) : [...values]
+        const newValues = values.length > 200 ? takeright(values, 100) : [...values]
 
         newState[id] = [
           ...newValues,

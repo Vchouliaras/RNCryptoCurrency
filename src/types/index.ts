@@ -12,8 +12,8 @@ export interface IPriceProps {
   symbol: string
 }
 
-export interface IGraphProps {
-  width?: number
+export interface IGraphState {
+  width: number
   height: number
 }
 
