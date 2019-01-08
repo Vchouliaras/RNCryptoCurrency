@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { SafeAreaView, ScrollView } from 'react-native'
 import { Screen } from '@shoutem/ui'
-// import takeright from 'lodash.takeright'
+import takeright from 'lodash.takeright'
 
 import Header from './components/Header/Header.component'
 import Coins from './components/Coins/Coins.component'
@@ -51,14 +51,12 @@ export default class App extends React.Component<{}, IAppState> {
     this.setState(state => {
       const now = Date.now()
       Object.entries(state).map(([id, values]) => {
-        // let prevValues = values.length > 5
-        //   ? takeright(values, 3)
-        //   : [...values]
-
-        // debugger
+        // Truncate state when values
+        // overcome a specific amount
+        const newValues = values.length > 400 ? takeright(values, 100) : [...values]
 
         newState[id] = [
-          ...values,
+          ...newValues,
           {
             price: id === product_id ? Number(price) : 0,
             time: now,
@@ -86,8 +84,8 @@ export default class App extends React.Component<{}, IAppState> {
     ws.onmessage = ({ data }) => {
       const { product_id, price } = JSON.parse(data)
 
-      // eslint-disable-next-line
-      // console.log(product_id, price)
+      // eslint-disable-next-line no-console
+      console.log(product_id, price)
 
       if (!this.shouldUpdateState(product_id, price)) {
         return null
@@ -99,6 +97,7 @@ export default class App extends React.Component<{}, IAppState> {
     }
 
     ws.onerror = e => {
+      // eslint-disable-next-line no-console
       console.log(e)
     }
   }

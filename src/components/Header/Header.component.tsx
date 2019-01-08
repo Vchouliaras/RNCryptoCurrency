@@ -1,18 +1,17 @@
-import React, { Component, Fragment } from 'react'
-import { View } from 'react-native'
-import { Heading, Divider } from '@shoutem/ui'
+import React from 'react'
+import { Heading, Divider, View } from '@shoutem/ui'
 
 import Styles from './Header.styles'
 
-export default class Header extends Component {
+export default class Header extends React.Component {
   render() {
     return (
-      <Fragment>
+      <React.Fragment>
         <View style={Styles.container}>
           <Heading> Live Gryptos </Heading>
         </View>
         <Divider style={Styles.divider} styleName="line" />
-      </Fragment>
+      </React.Fragment>
     )
   }
 }
