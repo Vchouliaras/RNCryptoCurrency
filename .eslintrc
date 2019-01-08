@@ -15,6 +15,11 @@
     "prettier"
   ],
   "extends": ["plugin:prettier/recommended", "eslint:recommended", "plugin:react/recommended"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
     "react/no-did-mount-set-state": 2,
     "react/no-direct-mutation-state": 2,
