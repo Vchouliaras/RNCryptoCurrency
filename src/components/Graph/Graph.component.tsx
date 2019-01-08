@@ -14,7 +14,10 @@ import { IGraphProps, IAppState } from '../../types'
 export default class Graph extends React.Component<IGraphProps, {}> {
   static contextType = CryptoContext
 
-  static defaultProps: IGraphProps
+  static defaultProps: IGraphProps = {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height / 2,
+  }
 
   /**
    *
@@ -108,9 +111,4 @@ export default class Graph extends React.Component<IGraphProps, {}> {
       </ART.Surface>
     )
   }
-}
-
-Graph.defaultProps = {
-  width: Dimensions.get('window').width,
-  height: 350,
 }

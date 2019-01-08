@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView, ScrollView } from 'react-native'
 import { Screen } from '@shoutem/ui'
 // import takeright from 'lodash.takeright'
 
@@ -108,11 +108,13 @@ export default class App extends React.Component<{}, IAppState> {
       <Screen>
         <SafeAreaView>
           <Header />
-          <CryptoContext.Provider value={this.state}>
-            <Coins />
-            <Graph />
-            <Info />
-          </CryptoContext.Provider>
+          <ScrollView>
+            <CryptoContext.Provider value={this.state}>
+              <Coins />
+              <Graph />
+              <Info />
+            </CryptoContext.Provider>
+          </ScrollView>
         </SafeAreaView>
       </Screen>
     )
