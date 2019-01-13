@@ -7,17 +7,20 @@
     "start:debugger": "env REACT_DEBUGGER=\"$([ -d '/Applications/React Native Debugger.app' ] && echo \"open 'rndebugger://set-debugger-loc?host=localhost&port=8081' --args\")\" yarn start",
     "watch:tsc": "tsc -w",
     "start:all": "concurrently --kill-others \"yarn watch:tsc\" \"yarn start:debugger\"",
-    "ios": "cd ios && rm -rf build && cd .. && react-native run-ios --simulator=\"iPhone 7\"",
+    "ios": "cd ios && rm -rf build && cd .. && react-native run-ios --simulator=\"iPhone X\"",
     "ios:bundle": "react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle",
     "ios:release": "react-native run-ios --configuration Release",
     "android": "cd android && ./gradlew clean && cd .. && react-native run-android",
     "android:bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/main.jsbundle",
     "android:prerelease": "cd android && ./gradlew assembleRelease",
     "android:release": "react-native run-android --variant=release",
-    "test": "jest",
     "lint": "eslint src/ --ext tsx,ts",
     "lint:fix": "eslint src/ --fix",
-    "pretty": "prettier --write \"./src/**/*.{tsx,ts}\""
+    "pretty": "prettier --write \"./src/**/*.{tsx,ts}\"",
+    "test": "jest --verbose",
+    "test:update": "jest --verbose --updateSnapshot",
+    "test:watch": "jest --verbose --watch",
+    "coverage": "jest --verbose --coverage && open ./coverage/lcov-report/index.html"
   },
   "husky": {
     "hooks": {
@@ -43,6 +46,7 @@
   },
   "devDependencies": {
     "@types/d3": "^5.5.0",
+    "@types/jest": "^23.3.12",
     "@types/lodash.findlast": "^4.6.4",
     "@types/lodash.groupby": "^4.6.4",
     "@types/lodash.takeright": "^4.1.4",
@@ -65,6 +69,7 @@
     "react-native-typescript-transformer": "^1.2.10",
     "react-test-renderer": "16.6.0-alpha.8af6728",
     "shoutem-ui-types": "^1.0.8",
+    "ts-jest": "^23.10.5",
     "typescript": "~3.1.1",
     "typescript-eslint-parser": "^20.0.0"
   },

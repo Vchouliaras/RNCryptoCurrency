@@ -20,8 +20,8 @@ export default class App extends React.Component<{}, IAppState> {
   /**
    * Determine whether state needs to be updated.
    *
-   * We do not update when WS response returns no data
-   * or returns updates for same coin prices.
+   * We do not update when WS response returns empty data
+   * or updates for same coin prices.
    *
    * @memberof App
    */
