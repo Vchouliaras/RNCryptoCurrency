@@ -20,7 +20,7 @@
     "test": "jest --verbose",
     "test:update": "jest --verbose --updateSnapshot",
     "test:watch": "jest --verbose --watch",
-    "coverage": "jest --verbose --coverage && open ./coverage/lcov-report/index.html"
+    "test:coverage": "jest --verbose --coverage && open ./coverage/lcov-report/index.html"
   },
   "husky": {
     "hooks": {
