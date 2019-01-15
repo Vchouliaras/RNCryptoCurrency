@@ -116,9 +116,9 @@ export default class Graph extends React.Component<{}, IGraphState> {
   }
 
   render() {
-    const isProductsEmpty = Coins.isProductsEmpty(this.context)
+    const areProductsEmpty = Coins.areProductsEmpty(this.context)
 
-    if (isProductsEmpty) {
+    if (areProductsEmpty) {
       return <Spinner style={{ ...Styles.spinner, size: 'large' }} />
     }
 

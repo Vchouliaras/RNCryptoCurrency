@@ -33,9 +33,9 @@ export default class Info extends React.Component<{}, IInfoState> {
   }
 
   render() {
-    const isProductsEmpty = Coins.isProductsEmpty(this.context)
+    const areProductsEmpty = Coins.areProductsEmpty(this.context)
 
-    if (isProductsEmpty) {
+    if (areProductsEmpty) {
       return null
     }
 

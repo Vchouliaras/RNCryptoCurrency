@@ -1,5 +1,5 @@
 import { Coins, CoinsColor } from '../config'
-import { ICoin } from '../types'
+import { ICoin, IAppState } from '../types'
 import findlast from 'lodash.findlast'
 
 export function getNormalName(name: string, character: string = '-'): string {
@@ -26,11 +26,11 @@ export function getCoinColor(coin: string): string {
   return index !== -1 ? CoinsColor[index] : ''
 }
 
-export function isProductsEmpty(products: Array<[]>): Boolean {
+export function areProductsEmpty(products: IAppState): Boolean {
   return Object.values(products).every(product => product.length === 0)
 }
 
-export function getLastValue(values: Array<ICoin>): ICoin {
+export function getLastNonZeroValue(values: Array<ICoin>): ICoin {
   const lastValue = findlast(values, value => value.price !== 0)
 
   if (typeof lastValue === 'undefined') {

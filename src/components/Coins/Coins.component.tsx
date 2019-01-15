@@ -24,7 +24,7 @@ export default class Coins extends React.Component {
               return null
             }
 
-            const { price } = CoinsUtil.getLastValue(currentCoin)
+            const { price } = CoinsUtil.getLastNonZeroValue(currentCoin)
             const symbol = CoinsUtil.getSymbol(coin)
 
             return <Price symbol={symbol} price={price} />

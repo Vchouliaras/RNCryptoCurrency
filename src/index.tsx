@@ -32,7 +32,7 @@ export default class App extends React.Component<{}, IAppState> {
       shouldUpdate = false
     }
 
-    const lastCoinValue: ICoin = CoinsUtil.getLastValue(this.state[currentProductId])
+    const lastCoinValue: ICoin = CoinsUtil.getLastNonZeroValue(this.state[currentProductId])
     if (lastCoinValue.price === Number(currentPrice)) {
       shouldUpdate = false
     }
