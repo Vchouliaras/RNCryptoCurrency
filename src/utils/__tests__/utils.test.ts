@@ -4,7 +4,7 @@ import { IAppState, ICoin } from '../../types'
 
 jest.mock('Dimensions')
 
-describe('Checking Utils methods', () => {
+describe('The util methods', () => {
   test('If width is bigger than height, orientation should be LANDSCAPE', () => {
     const orientation = Utils.Orientation.getOrientation()
     expect(orientation).toBe(Utils.Orientation.LANDSCAPE)
