@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Price component 1`] = `
+exports[`Price Component renders correctly 1`] = `
 <View>
   <Styled(Animated(Text))>
     <Text>
