@@ -2,7 +2,8 @@
 
 ## Description
 
-A React Native Crypto APP integrated with Redux. <i>Developed for training purposes<i>
+A React Native Crypto app illustrating
+cryptocurrencies live updates on a stream graph.
 
 ## Development
 
@@ -16,17 +17,16 @@ or
 
 Note that for "yarn run android" to work, you should have an open Android emulator or an Android device with USB Debugging enabled connected to your system via a USB cable.
 
+```yarn start:all``` - for running the app with Typescript watch mode
+
 ## Project Structure
 
 ```
 ├── src
-│   ├── assets
+│   ├── types
 │   ├── components
 │   ├── config
-│   ├── pages
-│   ├── redux
-│   ├── routes
-│   ├── styles
+│   ├── context
 │   └── utils
 ```
 
