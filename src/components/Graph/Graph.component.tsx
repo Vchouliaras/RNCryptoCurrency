@@ -49,7 +49,7 @@ export default class Graph extends React.Component<{}, IGraphState> {
    *
    * @memberof Graph
    */
-  getStackedData = (normalizedData: Array<{ [key: string]: number }>) => {
+  getStackedData = (normalizedData: Array<{ [key: string]: number }>): any => {
     const stack = d3
       .stack()
       .keys(Config.Coins)
@@ -67,10 +67,7 @@ export default class Graph extends React.Component<{}, IGraphState> {
    *
    * @memberof Graph
    */
-  generateGraphPath = (
-    series: Array<[]>,
-    normalizedData: Array<{ [key: string]: number }>
-  ): d3.Area<[number, number]> => {
+  generateGraphPath = (series: Array<[]>, normalizedData: Array<{ [key: string]: number }>) => {
     const xScale = d3
       .scaleLinear()
       .domain(d3.extent(normalizedData, d => d.time))
@@ -125,6 +122,8 @@ export default class Graph extends React.Component<{}, IGraphState> {
     const normalizedData = this.normalizeData(this.context)
     const series = this.getStackedData(normalizedData)
     const area = this.generateGraphPath(series, normalizedData)
+
+    debugger
 
     return (
       <ART.Surface width={this.state.width} height={this.state.height}>
